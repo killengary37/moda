@@ -47,13 +47,16 @@ const Home = () => {
                 <h2 id="latest" className="mb-6 text-heading-3 text-dark-900">
                     Latest shoes
                 </h2>
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     {products.map((p) => (
                         <Card
                             key={p.id}
                             title={p.title}
                             imageSrc={p.imageSrc}
                             price={p.price}
+                            badgeText={p.badge?.label}
+                            badgeVariant={p.badge ? (p.badge.tone === "green" ? "success" : p.badge.tone === "orange" ? "warning" : "danger") : "default"}
+                            metadataLines={[p.subtitle, p.meta]}
                         />
                     ))}
                 </div>
