@@ -16,10 +16,10 @@ export interface CardProps {
 }
 
 const badgeStyles: Record<BadgeVariant, string> = {
-  default: "bg-[--color-light-100] text-[--color-red]",
+  default: "bg-[--color-light-100] text-[--red]",
   success: "bg-[--color-green]/10 text-[--color-green]",
   warning: "bg-[--color-orange]/10 text-[--color-orange]",
-  danger: "bg-[--color-light-100] text-[--color-red]",
+  danger: "bg-[--color-light-100] text-[--red]",
 };
 
 export default function Card({
