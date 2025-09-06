@@ -32,8 +32,8 @@ export default function Navbar({
 
   return (
     <header className="w-full border-b border-[--color-light-300] bg-[--color-light-100]">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:py-4">
-        <div className="flex items-center gap-3">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
+        <div className="flex items-center">
           <Link href="#" aria-label="Home" className="flex items-center">
             <Image src={logoSrc} alt="Moda logo" width={28} height={28} priority />
           </Link>
@@ -58,12 +58,12 @@ export default function Navbar({
           />
         </button>
 
-        <ul className="hidden items-center gap-8 md:flex">
+        <ul className="hidden md:flex items-center gap-10">
           {items.map((item) => (
             <li key={item.label}>
               <Link
                 href={item.href}
-                className="text-[--color-dark-900] text-body-medium hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-[--color-dark-900] focus:ring-offset-2 focus:ring-offset-[--color-light-100]"
+                className="text-body-medium text-[--color-dark-900] hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-[--color-dark-900] focus:ring-offset-2 focus:ring-offset-[--color-light-100]"
               >
                 {item.label}
               </Link>
@@ -71,7 +71,7 @@ export default function Navbar({
           ))}
         </ul>
 
-        <div className="hidden items-center gap-6 md:flex">
+        <div className="hidden md:flex items-center gap-8">
           <button className="text-body-medium text-[--color-dark-900] hover:opacity-80">Search</button>
           <button className="text-body-medium text-[--color-dark-900]">
             My Cart {cartCount > 0 ? `(${cartCount})` : ""}
