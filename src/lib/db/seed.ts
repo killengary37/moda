@@ -1,5 +1,5 @@
 import { db } from './index';
-import { products } from './schema';
+import { products } from './schema/index';
 
 const sampleNikeProducts = [
   {
