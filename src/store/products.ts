@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Product } from '@/lib/db/schema';
+import { Product } from '@/lib/db/schema/index';
 
 interface ProductsState {
   products: Product[];
