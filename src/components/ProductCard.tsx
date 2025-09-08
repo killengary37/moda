@@ -1,4 +1,4 @@
-import { Product } from '@/lib/db/schema';
+import { Product } from '@/lib/db/schema/index';
 import Image from 'next/image';
 
 interface ProductCardProps {
