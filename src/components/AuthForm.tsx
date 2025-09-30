@@ -3,121 +3,141 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import SocialProviders from "./SocialProviders";
+import {useRouter} from "next/navigation";
 
-type Mode = "sign-in" | "sign-up";
-type Props = { mode: Mode };
+type Props = {
+    mode: "sign-in" | "sign-up";
+    onSubmit: (formData: FormData) => Promise<{ok: boolean; userId?: string} | void>;
+};
 
-export default function AuthForm({ mode }: Props) {
-  const [showPassword, setShowPassword] = useState(false);
-  const title = mode === "sign-up" ? "Join Moda Today!" : "Welcome Back";
-  const cta = mode === "sign-up" ? "Sign Up" : "Sign In";
-  const altHref = mode === "sign-up" ? "/sign-in" : "/sign-up";
-  const altText =
-    mode === "sign-up" ? "Already have an account? Sign In" : "New here? Create an account";
+export default function AuthForm({ mode, onSubmit }: Props) {
+  const [show, setShow] = useState(false);
+  const router = useRouter();
 
-  return (
-    <div className="space-y-6">
-      <h1 className="text-center text-heading-3 leading-[var(--text-heading-3--line-height)] font-medium text-[--color-dark-900]">
-        {title}
-      </h1>
-      <p className="text-center text-body text-[--color-dark-700]">
-        {mode === "sign-up" ? "Create your account to start your journey" : "Sign in to continue"}
-      </p>
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
 
-      <SocialProviders />
+      const formData = new FormData(e.currentTarget);
 
-      <div className="flex items-center gap-4">
-        <div className="h-px flex-1 bg-[--color-light-300]" />
-        <span className="text-footnote text-[--color-dark-700]">
-          Or {mode === "sign-up" ? "sign up" : "continue"} with
+      try {
+          const result = await onSubmit(formData);
+
+          if(result?.ok) router.push("/");
+      } catch (e) {
+          console.log("error", e);
+      }
+  }
+
+    return (
+        <div className="space-y-6">
+            <div className="text-center">
+                <p className="text-caption text-dark-700">
+                    {mode === "sign-in" ? "Don’t have an account? " : "Already have an account? "}
+                    <Link href={mode === "sign-in" ? "/sign-up" : "/sign-in"} className="underline">
+                        {mode === "sign-in" ? "Sign Up" : "Sign In"}
+                    </Link>
+                </p>
+                <h1 className="mt-3 text-heading-3 text-dark-900">
+                    {mode === "sign-in" ? "Welcome Back!" : "Join Nike Today!"}
+                </h1>
+                <p className="mt-1 text-body text-dark-700">
+                    {mode === "sign-in"
+                        ? "Sign in to continue your journey"
+                        : "Create your account to start your fitness journey"}
+                </p>
+            </div>
+
+            <SocialProviders variant={mode} />
+
+            <div className="flex items-center gap-4">
+                <hr className="h-px w-full border-0 bg-light-300" />
+                <span className="shrink-0 text-caption text-dark-700">
+          Or {mode === "sign-in" ? "sign in" : "sign up"} with
         </span>
-        <div className="h-px flex-1 bg-[--color-light-300]" />
-      </div>
+                <hr className="h-px w-full border-0 bg-light-300" />
+            </div>
 
-      <form className="space-y-4" action="#" method="post" noValidate>
-        {mode === "sign-up" && (
-          <div className="space-y-2">
-            <label htmlFor="name" className="text-footnote text-[--color-dark-700]">
-              Full Name
-            </label>
-            <input
-              id="name"
-              name="name"
-              autoComplete="name"
-              placeholder="Enter your full name"
-              className="h-12 w-full rounded-xl border border-[--color-light-300] bg-[--color-light-100] px-4 text-body text-[--color-dark-900] placeholder:text-[--color-dark-500] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--color-dark-900]"
-            />
-          </div>
-        )}
-
-        <div className="space-y-2">
-          <label htmlFor="email" className="text-footnote text-[--color-dark-700]">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            placeholder="johndoe@gmail.com"
-            className="h-12 w-full rounded-xl border border-[--color-light-300] bg-[--color-light-100] px-4 text-body text-[--color-dark-900] placeholder:text-[--color-dark-500] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--color-dark-900]"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="password" className="text-footnote text-[--color-dark-700]">
-            Password
-          </label>
-          <div className="relative">
-            <input
-              id="password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              placeholder={mode === "sign-up" ? "minimum 8 characters" : "your password"}
-              className="h-12 w-full rounded-xl border border-[--color-light-300] bg-[--color-light-100] px-4 pr-12 text-body text-[--color-dark-900] placeholder:text-[--color-dark-500] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--color-dark-900]"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((v) => !v)}
-              className="absolute inset-y-0 right-2 my-2 inline-flex h-8 w-8 items-center justify-center rounded-md hover:bg-[--color-light-200]"
-              aria-label={showPassword ? "Hide password" : "Show password"}
+            <form
+                className="space-y-4"
+                onSubmit={handleSubmit}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-            </button>
-          </div>
+                {mode === "sign-up" && (
+                    <div className="space-y-1">
+                        <label htmlFor="name" className="text-caption text-dark-900">
+                            Name
+                        </label>
+                        <input
+                            id="name"
+                            name="name"
+                            type="text"
+                            placeholder="Enter your name"
+                            className="w-full rounded-xl border border-light-300 bg-light-100 px-4 py-3 text-body text-dark-900 placeholder:text-dark-500 focus:outline-none focus:ring-2 focus:ring-dark-900/10"
+                            autoComplete="name"
+                        />
+                    </div>
+                )}
+
+                <div className="space-y-1">
+                    <label htmlFor="email" className="text-caption text-dark-900">
+                        Email
+                    </label>
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="johndoe@gmail.com"
+                        className="w-full rounded-xl border border-light-300 bg-light-100 px-4 py-3 text-body text-dark-900 placeholder:text-dark-500 focus:outline-none focus:ring-2 focus:ring-dark-900/10"
+                        autoComplete="email"
+                        required
+                    />
+                </div>
+
+                <div className="space-y-1">
+                    <label htmlFor="password" className="text-caption text-dark-900">
+                        Password
+                    </label>
+                    <div className="relative">
+                        <input
+                            id="password"
+                            name="password"
+                            type={show ? "text" : "password"}
+                            placeholder="minimum 8 characters"
+                            className="w-full rounded-xl border border-light-300 bg-light-100 px-4 py-3 pr-12 text-body text-dark-900 placeholder:text-dark-500 focus:outline-none focus:ring-2 focus:ring-dark-900/10"
+                            autoComplete={mode === "sign-in" ? "current-password" : "new-password"}
+                            minLength={8}
+                            required
+                        />
+                        <button
+                            type="button"
+                            className="absolute inset-y-0 right-0 px-3 text-caption text-dark-700"
+                            onClick={() => setShow((v) => !v)}
+                            aria-label={show ? "Hide password" : "Show password"}
+                        >
+                            {show ? "Hide" : "Show"}
+                        </button>
+                    </div>
+                </div>
+
+                <button
+                    type="submit"
+                    className="mt-2 w-full rounded-full bg-dark-900 px-6 py-3 text-body-medium text-light-100 hover:bg-dark-700 focus:outline-none focus:ring-2 focus:ring-dark-900/20"
+                >
+                    {mode === "sign-in" ? "Sign In" : "Sign Up"}
+                </button>
+
+                {mode === "sign-up" && (
+                    <p className="text-center text-footnote text-dark-700">
+                        By signing up, you agree to our{" "}
+                        <a href="#" className="underline">
+                            Terms of Service
+                        </a>{" "}
+                        and{" "}
+                        <a href="#" className="underline">
+                            Privacy Policy
+                        </a>
+                    </p>
+                )}
+            </form>
         </div>
-
-        {mode === "sign-in" && (
-          <div className="flex justify-end">
-            <a href="#" className="text-footnote underline">
-              Forgot password?
-            </a>
-          </div>
-        )}
-
-        <button
-          type="submit"
-          className="w-full h-12 rounded-xl bg-[--color-dark-900] text-[--color-light-100] text-body-medium hover:bg-black/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--color-dark-900]"
-        >
-          {cta}
-        </button>
-      </form>
-
-      <p className="text-center text-footnote text-[--color-dark-700]">
-        {mode === "sign-up" ? (
-          <>
-            By signing up, you agree to our <a className="underline" href="#">Terms of Service</a> and{" "}
-            <a className="underline" href="#">Privacy Policy</a>.
-          </>
-        ) : (
-          <Link href={altHref} className="underline">
-            {altText}
-          </Link>
-        )}
-      </p>
-    </div>
-  );
+    );
 }

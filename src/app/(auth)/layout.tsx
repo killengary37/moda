@@ -4,9 +4,9 @@ import Link from "next/link";
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-dvh grid grid-cols-1 lg:grid-cols-2">
-      <div className="hidden lg:flex items-end bg-[--color-dark-900] text-[--color-light-100] p-10 rounded-r-3xl">
+      <div className="hidden lg:flex items-end bg-dark-900 text-light-100 p-10 rounded-r-3xl">
         <div className="max-w-md space-y-4">
-          <div className="h-10 w-10 rounded-xl bg-[--color-light-100] flex items-center justify-center">
+          <div className="h-10 w-10 rounded-xl bg-light-100 flex items-center justify-center">
             <Image src="/logo.svg" alt="Moda" width={20} height={20} />
           </div>
           <h2 className="text-heading-2 leading-[var(--text-heading-2--line-height)] font-semibold">
@@ -17,11 +17,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             performance needs.
           </p>
           <div className="flex gap-2" aria-hidden="true">
-            <span className="h-2 w-2 rounded-full bg-[--color-light-300]" />
-            <span className="h-2 w-2 rounded-full bg-[--color-light-300] opacity-60" />
-            <span className="h-2 w-2 rounded-full bg-[--color-light-300] opacity-40" />
+            <span className="h-2 w-2 rounded-full bg-light-300" />
+            <span className="h-2 w-2 rounded-full bg-light-300 opacity-60" />
+            <span className="h-2 w-2 rounded-full bg-light-300 opacity-40" />
           </div>
-          <p className="text-footnote text-[--color-light-400] mt-10">
+          <p className="text-footnote text-light-400 mt-10">
             © {new Date().getFullYear()} Moda. All rights reserved.
           </p>
         </div>

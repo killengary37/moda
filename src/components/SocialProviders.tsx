@@ -1,33 +1,26 @@
-import React from "react";
 import Image from "next/image";
 
-type Provider = "google" | "apple";
-type Props = { onProviderClick?: (p: Provider) => void };
+type Props = { variant?: "sign-in" | "sign-up" };
 
-const btnBase =
-  "w-full h-12 rounded-xl border border-[--color-light-300] bg-[--color-light-100] text-[--color-dark-900] hover:bg-[--color-light-200] transition flex items-center justify-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--color-dark-900]";
-
-export default function SocialProviders({ onProviderClick }: Props) {
-  return (
-    <div className="space-y-3">
-      <button
-        className={btnBase}
-        type="button"
-        aria-label="Continue with Google"
-        onClick={() => onProviderClick?.("google")}
-      >
-        <Image src="/icons/google.svg" alt="" width={18} height={18} aria-hidden />
-        <span className="text-body-medium">Continue with Google</span>
-      </button>
-      <button
-        className={btnBase}
-        type="button"
-        aria-label="Continue with Apple"
-        onClick={() => onProviderClick?.("apple")}
-      >
-        <Image src="/icons/apple.svg" alt="" width={18} height={18} aria-hidden />
-        <span className="text-body-medium">Continue with Apple</span>
-      </button>
-    </div>
-  );
+export default function SocialProviders({ variant = "sign-in" }: Props) {
+    return (
+        <div className="space-y-3">
+            <button
+                type="button"
+                className="flex w-full items-center justify-center gap-3 rounded-xl border border-light-300 bg-light-100 px-4 py-3 text-body-medium text-dark-900 hover:bg-light-200 focus:outline-none focus:ring-2 focus:ring-dark-900/10"
+                aria-label={`${variant === "sign-in" ? "Continue" : "Sign up"} with Google`}
+            >
+                <Image src="/google.svg" alt="" width={18} height={18} />
+                <span>Continue with Google</span>
+            </button>
+            <button
+                type="button"
+                className="flex w-full items-center justify-center gap-3 rounded-xl border border-light-300 bg-light-100 px-4 py-3 text-body-medium text-dark-900 hover:bg-light-200 focus:outline-none focus:ring-2 focus:ring-dark-900/10"
+                aria-label={`${variant === "sign-in" ? "Continue" : "Sign up"} with Apple`}
+            >
+                <Image src="/apple.svg" alt="" width={18} height={18} />
+                <span>Continue with Apple</span>
+            </button>
+        </div>
+    );
 }
