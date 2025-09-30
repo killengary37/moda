@@ -1,0 +1,15 @@
+import { pgTable, uuid, varchar } from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { z } from 'zod';
+
+export const genders = pgTable('genders', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  label: varchar('label', { length: 50 }).notNull(),
+  slug: varchar('slug', { length: 50 }).notNull().unique(),
+});
+
+export const insertGenderSchema = createInsertSchema(genders);
+export const selectGenderSchema = createSelectSchema(genders);
+
+export type Gender = z.infer<typeof selectGenderSchema>;
+export type NewGender = z.infer<typeof insertGenderSchema>;
