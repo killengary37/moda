@@ -1,108 +1,88 @@
 "use client";
-import React from "react";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-type NavItem = {
-  label: string;
-  href: string;
-};
+const NAV_LINKS = [
+  { label: "Men", href: "/products?gender=men" },
+  { label: "Women", href: "/products?gender=women" },
+  { label: "Kids", href: "/products?gender=unisex" },
+  { label: "Collections", href: "/collections" },
+  { label: "Contact", href: "/contact" },
+] as const;
 
-interface NavbarProps {
-  items?: NavItem[];
-  logoSrc?: string;
-  cartCount?: number;
-}
-
-const defaultItems: NavItem[] = [
-  { label: "Men", href: "#" },
-  { label: "Women", href: "#" },
-  { label: "Kids", href: "#" },
-  { label: "Collections", href: "#" },
-  { label: "Contact", href: "#" },
-];
-
-export default function Navbar({
-  items = defaultItems,
-  logoSrc = "/logo.svg",
-  cartCount = 0,
-}: NavbarProps) {
+export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="w-full border-b border-[--color-light-300] bg-[--color-light-100]">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-        <div className="flex items-center">
-          <Link href="#" aria-label="Home" className="flex items-center">
-            <Image src={logoSrc} alt="Moda logo" width={28} height={28} priority />
-          </Link>
-        </div>
-
-        <button
-          aria-label="Open menu"
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          className="inline-flex h-10 w-10 items-center justify-center rounded md:hidden"
-          onClick={() => setOpen((s) => !s)}
+      <header className="sticky top-0 z-50 bg-light-100">
+        <nav
+            className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
+            aria-label="Primary"
         >
-          <span className="sr-only">Toggle navigation</span>
-          <span
-            className={`block h-0.5 w-6 bg-[--color-dark-900] transition-all ${open ? "translate-y-1.5 rotate-45" : ""}`}
-          />
-          <span
-            className={`mt-1 block h-0.5 w-6 bg-[--color-dark-900] transition-opacity ${open ? "opacity-0" : "opacity-100"}`}
-          />
-          <span
-            className={`mt-1 block h-0.5 w-6 bg-[--color-dark-900] transition-all ${open ? "-translate-y-1.5 -rotate-45" : ""}`}
-          />
-        </button>
+          <Link href="/" aria-label="Nike Home" className="flex items-center">
+            <Image src="/logo.svg" alt="Nike" width={28} height={28} priority className="invert" />
+          </Link>
 
-        <ul className="hidden md:flex items-center gap-10">
-          {items.map((item) => (
-            <li key={item.label}>
-              <Link
-                href={item.href}
-                className="text-body-medium text-[--color-dark-900] hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-[--color-dark-900] focus:ring-offset-2 focus:ring-offset-[--color-light-100]"
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+          <ul className="hidden items-center gap-8 md:flex">
+            {NAV_LINKS.map((l) => (
+                <li key={l.href}>
+                  <Link
+                      href={l.href}
+                      className="text-body text-dark-900 transition-colors hover:text-dark-700"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+            ))}
+          </ul>
 
-        <div className="hidden md:flex items-center gap-8">
-          <button className="text-body-medium text-[--color-dark-900] hover:opacity-80">Search</button>
-          <button className="text-body-medium text-[--color-dark-900]">
-            My Cart {cartCount > 0 ? `(${cartCount})` : ""}
-          </button>
-        </div>
-      </nav>
-
-      <div
-        id="mobile-menu"
-        className={`md:hidden ${open ? "block" : "hidden"} border-t border-[--color-light-300] bg-[--color-light-100]`}
-      >
-        <ul className="mx-auto max-w-7xl space-y-2 px-4 py-3">
-          {items.map((item) => (
-            <li key={item.label}>
-              <Link
-                href={item.href}
-                className="block rounded px-2 py-2 text-body-medium text-[--color-dark-900] hover:bg-[--color-light-200]"
-                onClick={() => setOpen(false)}
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-          <li className="mt-2 flex items-center justify-between px-2">
-            <button className="text-body-medium text-[--color-dark-900]">Search</button>
-            <button className="text-body-medium text-[--color-dark-900]">
-              My Cart {cartCount > 0 ? `(${cartCount})` : ""}
+          <div className="hidden items-center gap-6 md:flex">
+            <button className="text-body text-dark-900 transition-colors hover:text-dark-700">
+              Search
             </button>
-          </li>
-        </ul>
-      </div>
-    </header>
+            <button className="text-body text-dark-900 transition-colors hover:text-dark-700">
+              My Cart (2)
+            </button>
+          </div>
+
+          <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-md p-2 md:hidden"
+              aria-controls="mobile-menu"
+              aria-expanded={open}
+              onClick={() => setOpen((v) => !v)}
+          >
+            <span className="sr-only">Toggle navigation</span>
+            <span className="mb-1 block h-0.5 w-6 bg-dark-900"></span>
+            <span className="mb-1 block h-0.5 w-6 bg-dark-900"></span>
+            <span className="block h-0.5 w-6 bg-dark-900"></span>
+          </button>
+        </nav>
+
+        <div
+            id="mobile-menu"
+            className={`border-t border-light-300 md:hidden ${open ? "block" : "hidden"}`}
+        >
+          <ul className="space-y-2 px-4 py-3">
+            {NAV_LINKS.map((l) => (
+                <li key={l.href}>
+                  <Link
+                      href={l.href}
+                      className="block py-2 text-body text-dark-900 hover:text-dark-700"
+                      onClick={() => setOpen(false)}
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+            ))}
+            <li className="flex items-center justify-between pt-2">
+              <button className="text-body">Search</button>
+              <button className="text-body">My Cart (2)</button>
+            </li>
+          </ul>
+        </div>
+      </header>
   );
 }
